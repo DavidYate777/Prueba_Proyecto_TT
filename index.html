@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TextilControl — Panel de Control</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🧵</span>
+        <span class="logo-text">TextilControl</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-section="empleados">
+        <span class="nav-icon">👷</span>
+        <span class="nav-label">Empleados</span>
+      </a>
+      <a href="#" class="nav-item" data-section="inventario">
+        <span class="nav-icon">📦</span>
+        <span class="nav-label">Inventario</span>
+      </a>
+      <a href="#" class="nav-item" data-section="secciones">
+        <span class="nav-icon">🏭</span>
+        <span class="nav-label">Secciones</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="version">v1.0.0 — Planta Principal</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        <span class="page-date" id="pageDate"></span>
+      </div>
+    </header>
+
+    <!-- ======= DASHBOARD ======= -->
+    <section class="section active" id="section-dashboard">
+
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--accent:#f59e0b">
+          <div class="kpi-icon">👷</div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-empleados">0</span>
+            <span class="kpi-label">Empleados Activos</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#10b981">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-items">0</span>
+            <span class="kpi-label">Ítems en Inventario</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#3b82f6">
+          <div class="kpi-icon">🧺</div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-unidades">0</span>
+            <span class="kpi-label">Unidades Producidas</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#ef4444">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-data">
+            <span class="kpi-value" id="kpi-bajo">0</span>
+            <span class="kpi-label">Stock Bajo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card wide">
+          <h3 class="chart-title">Producción por Tipo de Unidad</h3>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">Stock por Sección</h3>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 120 120" id="donutSVG"></svg>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <h3 class="chart-title">Últimos Empleados Registrados</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Nombre</th><th>Cédula</th><th>Sección</th><th>Unidades</th></tr>
+          </thead>
+          <tbody id="dashboardTableBody">
+            <tr><td colspan="4" class="empty-row">Sin datos aún</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= EMPLEADOS ======= -->
+    <section class="section" id="section-empleados">
+      <div class="section-toolbar">
+        <button class="btn btn-primary" id="btnNuevoEmpleado">+ Nuevo Empleado</button>
+        <input type="text" class="search-input" id="searchEmpleado" placeholder="Buscar por nombre o cédula..."/>
+      </div>
+
+      <div class="form-card" id="formEmpleado" style="display:none">
+        <h3 class="form-title" id="formEmpleadoTitle">Registrar Empleado</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="empNombre" placeholder="Ej: Juan"/>
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" id="empApellido" placeholder="Ej: García"/>
+          </div>
+          <div class="form-group">
+            <label>Cédula</label>
+            <input type="text" id="empCedula" placeholder="Ej: 1234567890"/>
+          </div>
+          <div class="form-group">
+            <label>Sección</label>
+            <select id="empSeccion"><option value="">Seleccionar...</option></select>
+          </div>
+          <div class="form-group">
+            <label>Unidad que maneja</label>
+            <select id="empUnidad">
+              <option value="Sacos">Sacos</option>
+              <option value="Ropa deportiva">Ropa deportiva</option>
+              <option value="Camisetas">Camisetas</option>
+              <option value="Pantalones">Pantalones</option>
+              <option value="Uniformes">Uniformes</option>
+              <option value="Telas">Telas</option>
+              <option value="Hilos">Hilos</option>
+              <option value="Accesorios">Accesorios</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Unidades Producidas</label>
+            <input type="number" id="empUnidades" placeholder="0" min="0"/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnGuardarEmpleado">Guardar</button>
+          <button class="btn btn-secondary" id="btnCancelarEmpleado">Cancelar</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr><th>Nombre</th><th>Apellido</th><th>Cédula</th><th>Sección</th><th>Unidad</th><th>Producción</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="empleadosTableBody">
+            <tr><td colspan="7" class="empty-row">Sin empleados registrados</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= INVENTARIO ======= -->
+    <section class="section" id="section-inventario">
+      <div class="section-toolbar">
+        <button class="btn btn-primary" id="btnNuevoItem">+ Nuevo Ítem</button>
+        <input type="text" class="search-input" id="searchInventario" placeholder="Buscar ítem..."/>
+      </div>
+
+      <div class="form-card" id="formInventario" style="display:none">
+        <h3 class="form-title" id="formInventarioTitle">Registrar Ítem</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre del Ítem</label>
+            <input type="text" id="invNombre" placeholder="Ej: Hilo de algodón"/>
+          </div>
+          <div class="form-group">
+            <label>Categoría</label>
+            <select id="invCategoria">
+              <option value="Materia Prima">Materia Prima</option>
+              <option value="Producto Terminado">Producto Terminado</option>
+              <option value="Insumos">Insumos</option>
+              <option value="Maquinaria">Maquinaria</option>
+              <option value="Empaque">Empaque</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sección</label>
+            <select id="invSeccion"><option value="">Seleccionar...</option></select>
+          </div>
+          <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" id="invCantidad" placeholder="0" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Unidad de Medida</label>
+            <select id="invUnidad">
+              <option value="unidades">Unidades</option>
+              <option value="kg">Kilogramos</option>
+              <option value="metros">Metros</option>
+              <option value="rollos">Rollos</option>
+              <option value="cajas">Cajas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stock Mínimo</label>
+            <input type="number" id="invMinimo" placeholder="10" min="0"/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnGuardarItem">Guardar</button>
+          <button class="btn btn-secondary" id="btnCancelarItem">Cancelar</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr><th>Ítem</th><th>Categoría</th><th>Sección</th><th>Cantidad</th><th>Unidad</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="inventarioTableBody">
+            <tr><td colspan="7" class="empty-row">Sin ítems registrados</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= SECCIONES ======= -->
+    <section class="section" id="section-secciones">
+      <div class="section-toolbar">
+        <button class="btn btn-primary" id="btnNuevaSeccion">+ Nueva Sección</button>
+      </div>
+
+      <div class="form-card" id="formSeccion" style="display:none">
+        <h3 class="form-title">Registrar Sección</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre de la Sección</label>
+            <input type="text" id="secNombre" placeholder="Ej: Corte y Confección"/>
+          </div>
+          <div class="form-group">
+            <label>Responsable</label>
+            <input type="text" id="secResponsable" placeholder="Ej: María López"/>
+          </div>
+          <div class="form-group">
+            <label>Descripción</label>
+            <input type="text" id="secDescripcion" placeholder="Breve descripción..."/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btnGuardarSeccion">Guardar</button>
+          <button class="btn btn-secondary" id="btnCancelarSeccion">Cancelar</button>
+        </div>
+      </div>
+
+      <div class="secciones-grid" id="seccionesGrid">
+        <div class="empty-state">No hay secciones registradas aún.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
